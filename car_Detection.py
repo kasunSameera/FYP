@@ -1,5 +1,4 @@
 import cv2
-import numpy as np
 from timeit import default_timer as timer
 from sort import *
 
@@ -15,10 +14,12 @@ while True:
     grayvideo = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     cars = car_cascade.detectMultiScale(grayvideo, 1.1, minNeighbors=4)  # 1.1 #2
 
+    mot_before_list = []
     for (x, y, w, h) in cars:
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
-
-    track_bbs_ids = mot_tracker.update(cars)
+        mot_before_list.append([x, y, (x+w), (y+h), 0.8])
+    mot_before_np = np.array(mot_before_list)
+    track_bbs_ids = mot_tracker.update(mot_before_np)
     mot_x1, mot_y1, mot_x2, mot_y2, obj_id = [0, 0, 0, 0, 0]
     trk_with_wid_hgt = []
     for i in track_bbs_ids:
