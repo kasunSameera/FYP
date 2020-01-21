@@ -4,7 +4,7 @@ from sort import *
 
 camera = cv2.VideoCapture("pedestrians.avi")
 camera.open("pedestrians.avi")
-car_cascade = cv2.CascadeClassifier('cascade3.xml')
+pedestrian_cascade = cv2.CascadeClassifier('cascade3.xml')
 frame_count = 0
 # create instance of SORT
 mot_tracker = Sort()
@@ -12,10 +12,10 @@ while True:
     start = timer()
     (grabbed, frame) = camera.read()
     grayvideo = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    cars = car_cascade.detectMultiScale(grayvideo, 1.1, minNeighbors=4)  # 1.1 #2
+    pedestrians = pedestrian_cascade.detectMultiScale(grayvideo, 1.1, minNeighbors=4)  # 1.1 #2
 
     mot_before_list = []
-    for (x, y, w, h) in cars:
+    for (x, y, w, h) in pedestrians:
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
         mot_before_list.append([x, y, (x+w), (y+h), 0.8])
     mot_before_np = np.array(mot_before_list)
